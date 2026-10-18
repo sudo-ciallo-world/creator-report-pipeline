@@ -1,0 +1,3 @@
+# Minimal offline report demo.
+jinja2>=3.1.6
+pydantic>=2.11.0

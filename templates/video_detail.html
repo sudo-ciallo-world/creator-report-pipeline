@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ video.title }}</title>
+    <style>
+      @font-face { font-family: "Noto Sans SC Local"; src: url("../assets/fonts/NotoSansSC.woff2") format("woff2"); }
+      @font-face { font-family: "Noto Serif SC Local"; src: url("../assets/fonts/NotoSerifSC.woff2") format("woff2"); }
+      :root { color-scheme: light dark; --paper:#f6f2ea; --surface:#fffdf8; --ink:#1d1d1b; --muted:#66645f; --line:#cbc6bb; --teal:#176c67; --soft:#ebe5da; }
+      * { box-sizing: border-box; }
+      body { margin:0; color:var(--ink); background:var(--paper); font-family:"Noto Sans SC Local","Microsoft YaHei",sans-serif; line-height:1.75; }
+      main { max-width:1040px; margin:0 auto; padding:28px 22px 72px; }
+      h1,h2 { font-family:"Noto Serif SC Local","Songti SC",serif; letter-spacing:0; }
+      h1 { max-width:24ch; margin:12px 0 16px; font-size:36px; line-height:1.28; }
+      h2 { margin:0 0 12px; font-size:22px; }
+      a { color:var(--teal); text-underline-offset:3px; }
+      :focus-visible { outline:3px solid var(--teal); outline-offset:3px; }
+      .back-link { min-height:44px; display:inline-flex; align-items:center; }
+      .header { padding-bottom:24px; border-bottom:3px double var(--ink); }
+      .channel-identity { min-height:56px; margin:12px 0 22px; display:flex; align-items:center; gap:12px; }
+      .channel-avatar { width:52px; height:52px; flex:0 0 auto; border:1px solid var(--line); border-radius:50%; background:var(--soft); object-fit:cover; }
+      .channel-name { display:block; color:var(--ink); font-weight:700; text-decoration:none; }
+      .channel-id { display:block; color:var(--muted); font-size:13px; overflow-wrap:anywhere; }
+      .hero-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,420px); gap:32px; align-items:start; }
+      .hero-grid--text-only { grid-template-columns:minmax(0,1fr); }
+      .thumbnail { width:100%; aspect-ratio:16/9; border:1px solid var(--line); border-radius:4px; background:var(--soft); object-fit:cover; }
+      .video-meta { margin:0 0 16px; display:flex; flex-wrap:wrap; gap:6px 18px; color:var(--muted); font-size:13px; }
+      .video-meta div { display:flex; gap:6px; }
+      .video-meta dt { font-weight:700; }
+      .video-meta dd { margin:0; }
+      .source-link { min-height:44px; margin:0; display:flex; align-items:center; }
+      .band { padding:24px 0; border-bottom:1px solid var(--line); }
+      .summary { max-width:72ch; margin:0; font-family:"Noto Serif SC Local","Songti SC",serif; font-size:18px; line-height:1.85; }
+      .analysis-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:36px; }
+      .analysis-grid ul { margin:0; padding-left:1.25em; }
+      .analysis-grid li + li { margin-top:8px; }
+      [contenteditable] { padding:8px; border:1px dashed transparent; border-radius:4px; }
+      [contenteditable]:focus-visible { border-color:var(--teal); background:var(--surface); }
+      details { border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+      summary { min-height:52px; display:flex; align-items:center; justify-content:space-between; gap:16px; cursor:pointer; font-family:"Noto Serif SC Local","Songti SC",serif; font-size:18px; font-weight:700; }
+      summary span { color:var(--muted); font-family:"Noto Sans SC Local","Microsoft YaHei",sans-serif; font-size:13px; font-weight:400; }
+      .description { max-width:75ch; margin:0; padding:0 0 20px; color:var(--muted); white-space:pre-wrap; overflow-wrap:anywhere; }
+      pre { margin:0; white-space:pre-wrap; word-break:break-word; font:inherit; }
+      @media (max-width:760px) {
+        main{padding:18px 16px 50px}
+        h1{font-size:30px}
+        .hero-grid,.analysis-grid{grid-template-columns:1fr;gap:22px}
+        .channel-identity{margin-bottom:16px}
+      }
+      @media (prefers-color-scheme:dark) { :root{--paper:#181817;--surface:#222220;--ink:#efeee9;--muted:#aaa79f;--line:#4a4843;--teal:#71bbb3;--soft:#2d2c29} }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="header">
+        <a class="back-link" href="../index.html">返回总报告</a>
+        <div class="channel-identity">
+          {% if report.channel.avatar_path %}
+          <img class="channel-avatar" src="../{{ report.channel.avatar_path }}" alt="{{ report.channel.title }}">
+          {% endif %}
+          <div>
+            <a class="channel-name" href="{{ report.channel.source_url }}">{{ report.channel.title }}</a>
+            <span class="channel-id">{{ report.channel.platform }} · 博主 ID {{ report.channel.source_id.split(":", 1)[-1] }}</span>
+          </div>
+        </div>
+        <div class="hero-grid{% if not video.thumbnail_path %} hero-grid--text-only{% endif %}">
+          <div>
+            <h1>{{ video.title }}</h1>
+            <dl class="video-meta">
+              <div><dt>发布</dt><dd>{{ video.published_at.strftime("%Y-%m-%d") if video.published_at else "日期未知" }}</dd></div>
+              <div><dt>时长</dt><dd>{{ (video.duration_seconds // 60) if video.duration_seconds else "?" }} 分钟</dd></div>
+              <div><dt>字幕</dt><dd>{{ video.subtitle_source or video.transcript_status }}</dd></div>
+            </dl>
+            <p class="source-link"><a href="{{ video.source_url }}">打开原视频</a></p>
+          </div>
+          {% if video.thumbnail_path %}
+          <img class="thumbnail" src="../{{ video.thumbnail_path }}" alt="">
+          {% endif %}
+        </div>
+      </header>
+      <section class="band">
+        <h2>短评</h2>
+        <p class="summary" contenteditable="true" role="textbox" aria-label="编辑视频短评" aria-multiline="true">{{ video.summary.overview if video.summary else "暂无短评" }}</p>
+      </section>
+      <section class="band analysis-grid">
+        <div>
+          <h2>关键要点</h2>
+          <ul>{% for item in video.summary.key_points if video.summary %}<li>{{ item }}</li>{% endfor %}</ul>
+        </div>
+        <div>
+          <h2>核心观点</h2>
+          <ul>{% for item in video.summary.viewpoints if video.summary %}<li>{{ item }}</li>{% endfor %}</ul>
+        </div>
+      </section>
+      {% if video.description %}
+      <section class="band">
+        <details>
+          <summary>原视频简介 <span>展开查看完整内容</span></summary>
+          <p class="description">{{ video.description }}</p>
+        </details>
+      </section>
+      {% endif %}
+      <section class="band">
+        <h2>原语言字幕</h2>
+        <pre>{% for chunk in video.transcript %}[{{ "%02d:%02d"|format((chunk.start // 60)|int, (chunk.start % 60)|int) }}] {{ chunk.text }}
+{% endfor %}</pre>
+      </section>
+    </main>
+  </body>
+</html>

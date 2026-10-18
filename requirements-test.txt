@@ -1,0 +1,9 @@
+-r requirements.txt
+# Mocked orchestration tests; no speech model is downloaded.
+httpx>=0.28.1
+sqlmodel>=0.0.24
+yt-dlp>=2026.3.31
+youtube-transcript-api>=1.2.4
+python-dotenv>=1.2.2
+pytest>=8.4.1
+pytest-asyncio>=1.0.0

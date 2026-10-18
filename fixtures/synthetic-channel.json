@@ -1,0 +1,71 @@
+{
+  "channel": {
+    "source_id": "synthetic-demo",
+    "platform": "youtube",
+    "title": "Synthetic Creator Lab",
+    "description": "Fictional channel. All text and images in this demo are synthetic.",
+    "source_url": "https://example.invalid/synthetic-channel",
+    "avatar_path": "assets/media/synthetic-waveform.png"
+  },
+  "generated_at": "2026-10-17T12:00:00+00:00",
+  "video_count": 2,
+  "processed_video_count": 2,
+  "failed_video_count": 0,
+  "date_range_label": "Synthetic demonstration",
+  "high_level_summary": "Synthetic summary: keep source transcripts separate from generated interpretation.",
+  "channel_theme": "Offline pipeline engineering",
+  "repeated_viewpoints": ["Source material and model interpretation have different provenance."],
+  "recurring_formats": ["Synthetic explainers"],
+  "topic_clusters": [
+    {
+      "label": "Reliable pipelines",
+      "summary": "Synthetic examples of fallback and source-preserving exports.",
+      "representative_video_ids": ["synthetic-01", "synthetic-02"],
+      "video_count": 2
+    }
+  ],
+  "videos": [
+    {
+      "video_id": "synthetic-01",
+      "platform": "youtube",
+      "source_url": "https://example.invalid/synthetic-01",
+      "title": "Synthetic: platform subtitles first",
+      "description": "Fictional video, not downloaded from YouTube.",
+      "duration_seconds": 90,
+      "subtitle_source": "synthetic-platform-fixture",
+      "transcript_status": "ready",
+      "thumbnail_path": "assets/media/synthetic-waveform.png",
+      "transcript": [
+        { "start": 0, "end": 10, "text": "SYNTHETIC TRANSCRIPT: first try the available platform subtitles." }
+      ],
+      "summary": {
+        "overview": "SYNTHETIC MODEL OUTPUT: platform captions can avoid unnecessary transcription.",
+        "key_points": ["Prefer existing subtitles before audio transcription."],
+        "viewpoints": ["Use provider fallback only when needed."],
+        "topics": ["Reliable pipelines"],
+        "snippets": []
+      }
+    },
+    {
+      "video_id": "synthetic-02",
+      "platform": "youtube",
+      "source_url": "https://example.invalid/synthetic-02",
+      "title": "Synthetic: preserve transcript provenance",
+      "description": "Fictional video, not transcribed by Whisper or Gemini.",
+      "duration_seconds": 120,
+      "subtitle_source": "synthetic-local-fixture",
+      "transcript_status": "ready",
+      "thumbnail_path": "assets/media/synthetic-waveform.png",
+      "transcript": [
+        { "start": 0, "end": 10, "text": "SYNTHETIC TRANSCRIPT: keep the source text and generated summary in different exports." }
+      ],
+      "summary": {
+        "overview": "SYNTHETIC MODEL OUTPUT: a readable report should retain traceable source text.",
+        "key_points": ["Export source transcripts separately."],
+        "viewpoints": ["A summary is not a transcript."],
+        "topics": ["Reliable pipelines"],
+        "snippets": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ report.channel.title }} - Creator Report</title>
+    <style>
+      @font-face {
+        font-family: "Noto Sans SC Local";
+        src: url("assets/fonts/NotoSansSC.woff2") format("woff2");
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Noto Serif SC Local";
+        src: url("assets/fonts/NotoSerifSC.woff2") format("woff2");
+        font-display: swap;
+      }
+      :root {
+        color-scheme: light dark;
+        --paper: #f6f2ea;
+        --surface: #fffdf8;
+        --ink: #1d1d1b;
+        --muted: #66645f;
+        --line: #cbc6bb;
+        --red: #b8392f;
+        --teal: #176c67;
+        --gold: #a56b16;
+        --soft: #ebe5da;
+      }
+      * { box-sizing: border-box; }
+      html { background: var(--paper); }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: "Noto Sans SC Local", "Microsoft YaHei", sans-serif;
+        line-height: 1.72;
+      }
+      a { color: var(--teal); text-underline-offset: 3px; }
+      :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+      button {
+        min-height: 44px;
+        border: 1px solid var(--ink);
+        border-radius: 4px;
+        padding: 8px 12px;
+        color: var(--surface);
+        background: var(--ink);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button.secondary { color: var(--ink); background: transparent; }
+      .page { max-width: 1180px; margin: 0 auto; padding: 28px 24px 72px; }
+      .masthead {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+        padding-bottom: 18px;
+        border-bottom: 3px double var(--ink);
+      }
+      .brand {
+        margin: 0 0 8px;
+        color: var(--red);
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      h1, h2, h3 {
+        font-family: "Noto Serif SC Local", "Songti SC", serif;
+        letter-spacing: 0;
+      }
+      h1 { max-width: 16ch; margin: 0; font-size: 46px; line-height: 1.15; }
+      h2 { margin: 0 0 14px; font-size: 25px; line-height: 1.3; }
+      h3 { margin: 0 0 8px; font-size: 19px; line-height: 1.45; }
+      p { margin: 0 0 12px; }
+      .avatar {
+        width: 96px;
+        height: 96px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        object-fit: cover;
+        background: var(--soft);
+      }
+      .theme {
+        max-width: 850px;
+        margin: 18px 0 0;
+        font-family: "Noto Serif SC Local", "Songti SC", serif;
+        font-size: 20px;
+      }
+      .channel-line { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+      .channel-line a { font-weight: 700; }
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-top: 24px;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .fact { min-width: 0; padding: 12px 14px; border-right: 1px solid var(--line); }
+      .fact:last-child { border-right: 0; }
+      .fact b { display: block; font-size: 21px; }
+      .fact span { color: var(--muted); font-size: 13px; }
+      .band { padding: 28px 0; border-bottom: 1px solid var(--line); }
+      .lead-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 36px; }
+      .editable {
+        min-height: 64px;
+        padding: 8px;
+        border: 1px dashed transparent;
+        border-radius: 4px;
+      }
+      .editable:focus { outline: none; border-color: var(--teal); background: var(--surface); }
+      .editable:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+      .thread { margin: 0; padding: 0; list-style: none; counter-reset: thread; }
+      .thread li {
+        position: relative;
+        padding: 0 0 14px 34px;
+        counter-increment: thread;
+      }
+      .thread li::before {
+        content: counter(thread);
+        position: absolute;
+        left: 0;
+        top: 2px;
+        width: 22px;
+        height: 22px;
+        border: 1px solid var(--red);
+        border-radius: 50%;
+        color: var(--red);
+        text-align: center;
+        font-size: 12px;
+        line-height: 20px;
+      }
+      .distribution { display: grid; gap: 10px; }
+      .distribution-row {
+        display: grid;
+        grid-template-columns: minmax(100px, 180px) minmax(120px, 1fr) 72px;
+        gap: 12px;
+        align-items: center;
+      }
+      .bar { height: 8px; background: var(--soft); }
+      .bar span { display: block; height: 100%; background: var(--gold); }
+      .recommendations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 28px; }
+      .recommendation { padding: 10px 0; border-top: 1px solid var(--line); }
+      .recommendation small { color: var(--muted); }
+      .video-list { border-top: 2px solid var(--ink); }
+      .video-row {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 24px;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .thumbnail {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        object-fit: cover;
+        background: var(--soft);
+      }
+      .meta { color: var(--muted); font-size: 13px; }
+      .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+      .topic {
+        border-bottom: 2px solid var(--teal);
+        color: var(--teal);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .failures { color: var(--red); }
+      .report-actions { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 24px; }
+      .report-actions a {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        border: 1px solid var(--ink);
+        border-radius: 4px;
+        padding: 8px 12px;
+        color: var(--ink);
+        font-weight: 700;
+        text-decoration: none;
+      }
+      @media (max-width: 760px) {
+        .page { padding: 18px 16px 52px; }
+        .masthead { grid-template-columns: minmax(0, 1fr) 72px; gap: 12px; }
+        .avatar { width: 72px; height: 72px; }
+        h1 { font-size: 34px; }
+        .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .fact:nth-child(2) { border-right: 0; }
+        .lead-grid, .recommendations { grid-template-columns: 1fr; gap: 24px; }
+        .video-row { grid-template-columns: 1fr; gap: 12px; }
+        .distribution-row { grid-template-columns: 100px minmax(80px, 1fr) 56px; }
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #181817;
+          --surface: #222220;
+          --ink: #efeee9;
+          --muted: #aaa79f;
+          --line: #4a4843;
+          --red: #ed756a;
+          --teal: #71bbb3;
+          --gold: #d4a24f;
+          --soft: #2d2c29;
+        }
+      }
+      @media print {
+        .report-actions { display: none; }
+        .page { max-width: none; padding: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="masthead">
+        <div>
+          <p class="brand">Creator Report · {{ report.channel.platform }}</p>
+          <h1>{{ report.channel.title }}</h1>
+          <p class="channel-line"><a href="{{ report.channel.source_url }}">频道主页</a> · 博主 ID {{ report.channel.source_id.split(":", 1)[-1] }}</p>
+          <p class="theme">{{ report.channel_theme }}</p>
+        </div>
+        {% if report.channel.avatar_path %}
+        <img class="avatar" src="{{ report.channel.avatar_path }}" alt="{{ report.channel.title }}">
+        {% endif %}
+      </header>
+
+      <section class="facts" aria-label="报告概况">
+        <div class="fact"><b>{{ report.processed_video_count }}</b><span>成功处理</span></div>
+        <div class="fact"><b>{{ report.failed_video_count }}</b><span>失败项</span></div>
+        <div class="fact"><b>{{ report.date_range_label }}</b><span>内容跨度</span></div>
+        <div class="fact"><b>{{ report.generated_at.strftime("%Y-%m-%d") }}</b><span>生成日期</span></div>
+      </section>
+
+      <section class="band lead-grid">
+        <div>
+          <h2>频道判断</h2>
+          <p class="editable" contenteditable="true" role="textbox" aria-label="编辑频道判断" aria-multiline="true">{{ report.high_level_summary }}</p>
+        </div>
+        <div>
+          <h2>观点脉络</h2>
+          <ol class="thread">
+            {% for item in report.viewpoint_thread %}
+            <li>{{ item }}</li>
+            {% else %}
+            <li>暂无稳定观点脉络。</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </section>
+
+      <section class="band">
+        <h2>内容分布</h2>
+        <div class="distribution">
+          {% for item in report.content_distribution %}
+          <div class="distribution-row">
+            <span>{{ item.label }}</span>
+            <div class="bar"><span style="width: {{ item.share_percent }}%"></span></div>
+            <span>{{ item.video_count }} 条</span>
+          </div>
+          {% else %}
+          <p>暂无足够数据。</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="band">
+        <h2>推荐观看</h2>
+        <div class="recommendations">
+          {% for recommended_id in report.recommended_video_ids %}
+            {% for video in report.videos if video.video_id == recommended_id %}
+            <article class="recommendation">
+              <h3><a href="videos/{{ video.video_id }}.html">{{ video.title }}</a></h3>
+              <small>{{ video.summary.topics|join(" / ") if video.summary else "综合内容" }}</small>
+            </article>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="band">
+        <h2>视频短评</h2>
+        <div class="video-list">
+          {% for video in report.videos %}
+          <article class="video-row">
+            <div>
+              {% if video.thumbnail_path %}
+              <img class="thumbnail" src="{{ video.thumbnail_path }}" alt="" loading="lazy" decoding="async">
+              {% else %}
+              <div class="thumbnail"></div>
+              {% endif %}
+            </div>
+            <div>
+              <h3><a href="videos/{{ video.video_id }}.html">{{ video.title }}</a></h3>
+              <p class="meta">
+                {{ video.published_at.strftime("%Y-%m-%d") if video.published_at else "日期未知" }}
+                · {{ (video.duration_seconds // 60) if video.duration_seconds else "?" }} 分钟
+                · {{ video.subtitle_source or video.transcript_status }}
+              </p>
+              {% if video.summary and video.summary.topics %}
+              <div class="topics">
+                {% for topic in video.summary.topics %}
+                <span class="topic">{{ topic }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+              <p class="editable" contenteditable="true" role="textbox" aria-label="编辑《{{ video.title }}》短评" aria-multiline="true">{{ video.summary.overview if video.summary else "暂无短评。" }}</p>
+              <p><a href="{{ video.source_url }}">原视频</a> · <a href="videos/{{ video.video_id }}.html">完整文稿与要点</a></p>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      {% if report.failures %}
+      <section class="band failures">
+        <h2>失败记录</h2>
+        <ul>
+          {% for failure in report.failures %}
+          <li>{{ failure.title }}：{{ failure.reason }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      <footer class="report-actions">
+        <button type="button" onclick="exportEditedReport()">导出编辑后 HTML</button>
+        <a href="full_transcripts.md" download>下载完整字幕 Markdown</a>
+      </footer>
+    </main>
+    <script>
+      function exportEditedReport() {
+        const clone = document.documentElement.cloneNode(true);
+        clone.querySelectorAll(".report-actions").forEach((node) => node.remove());
+        clone.querySelectorAll("[contenteditable]").forEach((node) => node.removeAttribute("contenteditable"));
+        const source = "<!doctype html>\n" + clone.outerHTML;
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(new Blob([source], { type: "text/html;charset=utf-8" }));
+        link.download = "{{ report.channel.title|replace('\"', '') }}-creator-report.html";
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      }
+    </script>
+  </body>
+</html>

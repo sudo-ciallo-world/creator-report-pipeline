@@ -1,0 +1,4 @@
+-r requirements-test.txt
+# Optional providers, not exercised by the public demo.
+google-genai>=2.16.0
+faster-whisper>=1.2.1
