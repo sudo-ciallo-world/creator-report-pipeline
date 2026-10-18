@@ -10,4 +10,6 @@ Python libraries are declared as dependencies, not vendored or relabeled as orig
 
 ASR models, FFmpeg executables, platform content, cookies, real subtitles, and downloaded media are not distributed. Review the license and service conditions of the exact installed dependencies and model weights before a separate binary/model distribution or commercial deployment.
 
-No project-level license is assigned by this preparation. Confirm rights in the application code separately from the bundled asset terms.
+sudo-ciallo-world's licensable application code and documentation use MIT; see `LICENSE`.
+This grant does not replace the bundled assets' notices or license third-party
+libraries, models, platform content, or derived works.

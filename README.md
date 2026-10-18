@@ -32,6 +32,8 @@ The queue has a configurable worker limit, cancellation, and restart handling: r
 
 ## Provenance And AI Assistance
 
+Most development took place locally before this public snapshot, first published on October 18, 2026. Public commits record the released snapshot and subsequent changes.
+
 sudo-ciallo-world conceived and led the product workflow, architecture direction, queue/cache/fallback integration, report structure, debugging, validation, and acceptance criteria. Implementation was developed with substantial AI-assisted coding. Platform extraction, speech recognition, pretrained models, database tooling, and web libraries are reused.
 
 This is distinct from a separate Bilibili batch-processing browser extension. It does not claim original ASR or language-model research.
