@@ -11,6 +11,8 @@ from creator_report.models import (
 )
 from creator_report.reports import render_report_bundle
 
+# Fictional channel and synthetic transcript; no personal or platform data.
+
 
 def test_render_report_bundle_writes_index_and_video_detail_pages(tmp_path: Path) -> None:
     channel = ChannelProfile(

@@ -1,5 +1,7 @@
 from creator_report.sources import detect_platform, normalize_source_url
 
+# All source URLs in this module are synthetic and are never fetched.
+
 
 def test_detect_platform_recognizes_youtube_channel_url() -> None:
     platform = detect_platform("https://www.youtube.com/@synthetic-channel/videos")
@@ -18,7 +20,7 @@ def test_normalize_source_url_strips_query_parameters() -> None:
 
 def test_normalize_source_url_accepts_bilibili_tracking_suffix() -> None:
     normalized = normalize_source_url(
-        "https://space.bilibili.com/synthetic-channel/?spm_id_from=333.788.upinfo.detail.click"
+        "https://space.bilibili.com/synthetic-channel/?spm_id_from=synthetic.tracking"
     )
 
     assert normalized == "https://space.bilibili.com/synthetic-channel"

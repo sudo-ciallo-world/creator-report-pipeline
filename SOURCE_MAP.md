@@ -7,7 +7,7 @@ Selected from the current working tree of the larger Creator Report application:
 - Local Lucide browser bundle and Noto font subsets with adjacent license files.
 - Seven pre-existing test modules for queue, storage, transcription order, reports, pipeline, estimates, and source resolution.
 
-Preparation adds the synthetic fixture, waveform generator, cache/import-location regressions, offline test guard, documentation, and dependency lists. The storage test's sample channel identifier was replaced with an explicit synthetic identifier. The renderer now copies the bundled assets' license notices into generated reports as well.
+Preparation adds the synthetic fixture, waveform generator, cache/import-location regressions, offline test guard, documentation, and dependency lists. Storage, report-rendering, and source-normalization examples use explicit synthetic channel identifiers. The renderer now copies the bundled assets' license notices into generated reports as well.
 
 The application UI/server and service launchers are deliberately absent. This repository is a source-tree pipeline snapshot, not an installable copy of the full web application.
 
